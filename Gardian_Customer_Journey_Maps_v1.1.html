@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gardian — Customer Journey Maps</title>
+<style>
+  :root {
+    --g: #2D6A4F;
+    --g-light: #EAF3DE;
+    --g-border: #74b387;
+    --g-text: #1B4332;
+    --amber-bg: #FFF8E7;
+    --amber-text: #7B4F00;
+    --amber-border: #F5C842;
+    --blue-bg: #EBF4FF;
+    --blue-text: #1A3E6F;
+    --blue-border: #8AB8F0;
+    --red-bg: #FFF0EF;
+    --red-text: #7A1C1C;
+    --red-border: #F09090;
+    --neutral: #F7F6F3;
+    --border: #DDD9D0;
+    --text: #1A1A1A;
+    --muted: #555;
+    --hint: #888;
+    --white: #fff;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #F4F2ED;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 20px 60px;
+  }
+
+  .page-header {
+    max-width: 900px;
+    margin: 0 auto 32px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 2px solid var(--g);
+    padding-bottom: 16px;
+  }
+
+  .page-header h1 {
+    font-size: 26px;
+    font-weight: normal;
+    color: var(--g-text);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .page-header .subtitle {
+    font-size: 13px;
+    color: var(--hint);
+    font-family: Arial, sans-serif;
+    margin-top: 4px;
+  }
+
+  .page-header .meta {
+    font-size: 12px;
+    color: var(--hint);
+    font-family: Arial, sans-serif;
+    text-align: right;
+    flex-shrink: 0;
+    line-height: 1.6;
+  }
+
+  /* Stage nav */
+  .stage-nav {
+    max-width: 900px;
+    margin: 0 auto 20px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .stage-nav::-webkit-scrollbar { display: none; }
+
+  .stage-btn {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--muted);
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.4;
+    transition: all 0.15s;
+  }
+  .stage-btn:hover { border-color: var(--g-border); color: var(--g-text); }
+  .stage-btn.active {
+    background: var(--g);
+    border-color: var(--g);
+    color: #fff;
+    font-weight: bold;
+  }
+  .stage-btn .num {
+    font-size: 10px;
+    opacity: 0.7;
+    margin-bottom: 2px;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Stage card */
+  .stage-card {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* Stage header */
+  .stage-header {
+    background: var(--g);
+    padding: 20px 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .stage-num {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+  }
+
+  .stage-title { color: #fff; font-size: 22px; font-weight: normal; margin-bottom: 4px; }
+  .stage-tagline { color: rgba(255,255,255,0.78); font-size: 13px; font-family: Arial, sans-serif; }
+
+  /* Quote */
+  .quote-block {
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--g-light);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .quote-mark {
+    font-size: 36px;
+    color: var(--g-border);
+    line-height: 1;
+    margin-top: -4px;
+    flex-shrink: 0;
+    font-family: Georgia, serif;
+  }
+  .quote-text {
+    font-size: 15px;
+    color: var(--g-text);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* Content area */
+  .stage-content { padding: 24px 28px; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--hint);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Steps flow */
+  .steps-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 24px;
+    flex-wrap: nowrap;
+  }
+
+  .step-box {
+    flex: 1;
+    min-width: 0;
+    background: var(--g-light);
+    border: 1px solid var(--g-border);
+    border-radius: 8px;
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .step-num {
+    font-size: 10px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: var(--g);
+    opacity: 0.6;
+  }
+
+  .step-label {
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: var(--g-text);
+    line-height: 1.3;
+  }
+
+  .step-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    color: var(--g-border);
+    font-size: 18px;
+    padding: 0 4px;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Swim lanes */
+  .swim-lanes {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .swim-lane {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .swim-lane:last-child { border-bottom: none; }
+
+  .lane-label {
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+    background: var(--neutral);
+    display: flex;
+    align-items: flex-start;
+    padding-top: 15px;
+  }
+  .lane-label span {
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  .lane-content {
+    padding: 10px 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-content: flex-start;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+  }
+  .chip-emo { background: var(--amber-bg); color: var(--amber-text); border: 1px solid var(--amber-border); }
+  .chip-tp  { background: var(--blue-bg);  color: var(--blue-text);  border: 1px solid var(--blue-border); }
+  .chip-ri  { background: var(--red-bg);   color: var(--red-text);   border: 1px solid var(--red-border); }
+  .chip-ro  { background: var(--g-light);  color: var(--g-text);     border: 1px solid var(--g-border); }
+
+  /* Print / Export hint */
+  .footer-note {
+    max-width: 900px;
+    margin: 16px auto 0;
+    font-size: 12px;
+    color: var(--hint);
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .stage-nav { display: none; }
+    .stage-card { max-width: 100%; border: none; border-radius: 0; }
+    .footer-note { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>Gardian — Customer Journey Maps</h1>
+    <div class="subtitle">Happy-path journeys across 9 stages · MPD-445 · Ben Jones · May 2026</div>
+  </div>
+  <div class="meta">
+    Modular Garden Enclosure System<br>
+    Recycled ocean-bound plastic
+  </div>
+</div>
+
+<div class="stage-nav" id="snav"></div>
+
+<div class="stage-card" id="sc"></div>
+
+<div class="footer-note">
+  Select a stage above to navigate · All content reflects the happy-path customer experience
+</div>
+
+<script>
+const D = [
+  {
+    n: 1, name: "Discovery",
+    tag: "Customer recognizes their pest problem and seeks a solution",
+    q: "I'm fed up with pests eating my produce. I need to do something about this.",
+    steps: ["Pest triggers frustration", "Evaluates barrier approach", "Decides to purchase, not DIY", "Researches solutions online", "Discovers gardian.com"],
+    emo: ["Frustrated", "Determined", "Pragmatic", "Cautiously hopeful"],
+    tp: ["Personal garden observation", "Google search", "Reddit r/vegetablegardening", "Facebook gardening groups", "Word of mouth"],
+    ri: ["Opts for pesticide instead [crashout]", "Builds a DIY solution [crashout]", "Gardian not visible in search results [crashout]"],
+    ro: ["SEO targeting pest barrier and garden enclosure keywords", "Active presence in gardening communities online", "Compelling paid search creative: no chemicals · modular · accessible · recovered ocean-bound plastic", "Word-of-mouth cultivation via satisfied customers"]
+  },
+  {
+    n: 2, name: "Intake",
+    tag: "Customer lands on gardian.com and is drawn into the purchase funnel",
+    q: "Let me do some research and see what's out there.",
+    steps: ["Lands on homepage", "Reads value proposition", "Browses product pages", "Reviews sustainability story and warranty", "Clicks Start Building"],
+    emo: ["Curious", "Cautious", "Intrigued", "Growing confidence"],
+    tp: ["gardian.com homepage", "Product pages", "How It Works page", "About / Mission page"],
+    ri: ["Value proposition unclear", "No visible social proof", "Weak call to action (CTA)", "Leaves to compare competitors"],
+    ro: ["Clear hero message: pest barrier that works — no chemicals", "Prominent testimonials and star ratings", "Recycled ocean-bound plastic story prominently featured", "Persistent Start Building CTA throughout page scroll"]
+  },
+  {
+    n: 3, name: "Processing",
+    tag: "Customer works through the Component Builder wizard to configure their order",
+    q: "This seems like exactly what I needed. Let me figure out my setup.",
+    steps: ["Selects target pests", "Inputs garden dimensions", "Chooses garden bed style", "Selects accessories", "Reviews live BOM"],
+    emo: ["Engaged", "Empowered", "Focused", "Confident"],
+    tp: ["Component Builder wizard at gardian.com", "Live BOM summary panel", "Visual configuration preview"],
+    ri: ["Confusion about sizing or compatibility", "Decision fatigue from too many options", "Abandons wizard without completing"],
+    ro: ["Step-by-step UX with clear progress indicator", "Compatibility rules auto-enforced — no invalid configs possible", "Real-time BOM with visual preview updating on every selection", "'Need help?' option with chat and phone available throughout"]
+  },
+  {
+    n: 4, name: "Checkout",
+    tag: "Customer reviews their configuration, pays, and receives order confirmation",
+    q: "This is the right solution. Let's do it.",
+    steps: ["Reviews full BOM and pricing", "Adds to cart", "Enters shipping address", "Completes payment", "Receives order confirmation"],
+    emo: ["Decisive", "Confident", "Excited", "Satisfied"],
+    tp: ["Cart page", "Checkout form", "Stripe payment processor", "Order confirmation screen", "Confirmation email"],
+    ri: ["Surprise cost at checkout", "Checkout friction or form errors", "Uncertainty about returns policy", "No post-purchase communication"],
+    ro: ["Pricing shown transparently throughout the Builder; no cart surprise", "Trust signals: SSL badge · free shipping threshold · clear return policy", "Minimal required fields in checkout form", "Automatic confirmation email triggered immediately on order"]
+  },
+  {
+    n: 5, name: "Pre-Arrival",
+    tag: "Customer receives setup materials and prepares their garden space",
+    q: "My order is on the way. Should probably get ready.",
+    steps: ["Receives confirmation email", "Reviews order summary", "Watches setup video", "Reads installation guide", "Prepares garden space"],
+    emo: ["Anticipation", "Preparedness", "Excitement", "Proactive"],
+    tp: ["Email inbox", "gardian.com video library", "YouTube", "gardian.com FAQ and Resources"],
+    ri: ["Customer unprepared → frustration on delivery day", "Key questions go unanswered before arrival", "No delivery tracking visibility"],
+    ro: ["Thoughtful confirmation email with clear next-step prompts", "Video + text installation guides at gardian.com/resources", "Delivery tracking link included in confirmation email", "FAQ chatbot accessible around the clock for pre-arrival questions"]
+  },
+  {
+    n: 6, name: "Arrival",
+    tag: "Customer receives and unboxes Gardian, then begins assembly",
+    q: "Everything I need is right here. Let's get this set up.",
+    steps: ["Package arrives", "Customer unboxes", "Reviews documentation", "Scans QR code for video guide", "Begins assembly"],
+    emo: ["Excitement", "Satisfaction", "Sense of occasion", "Confidence"],
+    tp: ["Physical packaging", "Printed quick-start guide", "QR code → gardian.com setup video", "In-box component inventory checklist"],
+    ri: ["Confusing packaging or component labeling", "Missing or damaged components", "Assembly unclear without a visual guide", "Customer skips instructions and makes errors"],
+    ro: ["Premium unboxing experience with eco-friendly packaging narrative", "All components numbered and labeled to match the printed guide", "QR-linked HD setup video with pause and rewind support", "Complete inventory checklist so customer can verify all parts on arrival"]
+  },
+  {
+    n: 7, name: "Use",
+    tag: "Customer integrates Gardian into regular gardening activities across seasons",
+    q: "I haven't lost a single tomato since installing this. Worth every penny.",
+    steps: ["Installs panels", "Tends garden (weeding, etc.)", "Quick harvesting", "Seasonal takedown and storage", "Next-season reinstall"],
+    emo: ["Pride", "Peace of mind", "Deep satisfaction", "Long-term loyalty"],
+    tp: ["Physical product daily", "gardian.com FAQ if needed", "Email newsletter with seasonal tips", "Gardening community sharing"],
+    ri: ["Access difficult for older or less mobile gardeners - design against", "Component wear or UV degradation over time", "Confusion reconfiguring for a new bed or season"],
+    ro: ["Accessible gate operable with one hand at standing height", "UV-stabilized recycled ocean plastic rated for 20+ years", "Modular design reconfigures across bed shapes and sizes", "Seasonal care emails with expansion inspiration and tips"]
+  },
+  {
+    n: 8, name: "Troubleshooting",
+    tag: "Customer encounters a product issue and contacts Gardian for resolution",
+    q: "One latch broke after two years. They shipped a replacement the next day — no questions asked.",
+    steps: ["Notices component issue", "Visits support page", "Contacts Gardian", "Receives warranty response", "Replacement ships", "Issue resolved"],
+    emo: ["Concerned", "Apprehensive", "Hopeful", "Relieved", "Loyalty reinforced"],
+    tp: ["gardian.com support page", "Email support", "Phone support", "Social media: Instagram and Facebook", "Online warranty form"],
+    ri: ["Slow response times damage trust", "Unclear warranty terms frustrate customer", "Negative experience shared publicly", "No follow-up after resolution"],
+    ro: ["48-hour response guarantee on all support channels", "Warranty terms clearly published at gardian.com/warranty", "Free replacement policy for all manufacturing defects", "Proactive satisfaction follow-up email 7 days after resolution"]
+  },
+  {
+    n: 9, name: "Repeat Purchase",
+    tag: "Satisfied customer returns to expand or upgrade their Gardian setup",
+    q: "I want to add another bed. I know exactly what I need, and I know it'll work.",
+    steps: ["Returns to gardian.com", "Email retrieves order history", "Reviews previous config", "Explores compatible additions", "Purchases expansion components"],
+    emo: ["Loyal", "Enthusiastic", "Confident", "Excited to expand"],
+    tp: ["gardian.com order history feature", "CRM re-engagement email", "Retargeting ads", "Gardening community word of mouth"],
+    ri: ["No order history feature makes repeat harder", "Difficulty finding compatible components", "No personalization or loyalty recognition", "Customer purchases a competitor product"],
+    ro: ["Email-based order retrieval recalls full prior Gardian configuration", "Personalized compatible component recommendations based on prior purchase", "Loyalty recognition: welcome back with relevant suggestions for your setup", "Seasonal upsell campaigns: spring expansion · trellis upgrade · new bed config"]
+  }
+];
+
+function chipEl(t, cls) {
+  return `<span class="chip ${cls}">${t}</span>`;
+}
+
+function laneEl(label, items, cls, last) {
+  return `<div class="swim-lane" style="${last ? 'border-bottom:none' : ''}">
+    <div class="lane-label"><span>${label}</span></div>
+    <div class="lane-content">${items.map(t => chipEl(t, cls)).join('')}</div>
+  </div>`;
+}
+
+function stepsEl(arr) {
+  return arr.map((s, i) => {
+    const box = `<div class="step-box"><div class="step-num">${i + 1}</div><div class="step-label">${s}</div></div>`;
+    return i < arr.length - 1 ? box + '<div class="step-arrow">›</div>' : box;
+  }).join('');
+}
+
+function show(idx) {
+  document.querySelectorAll('.stage-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  const s = D[idx];
+  document.getElementById('sc').innerHTML = `
+    <div class="stage-header">
+      <div class="stage-num">${String(s.n).padStart(2, '0')}</div>
+      <div>
+        <div class="stage-title">${s.name}</div>
+        <div class="stage-tagline">${s.tag}</div>
+      </div>
+    </div>
+    <div class="quote-block">
+      <div class="quote-mark">&ldquo;</div>
+      <div class="quote-text">${s.q}</div>
+    </div>
+    <div class="stage-content">
+      <div class="section-label">Happy path</div>
+      <div class="steps-row">${stepsEl(s.steps)}</div>
+      <div class="section-label">Stage context</div>
+      <div class="swim-lanes">
+        ${laneEl('Emotions', s.emo, 'chip-emo', false)}
+        ${laneEl('Touchpoints', s.tp, 'chip-tp', false)}
+        ${laneEl('Risks', s.ri, 'chip-ri', false)}
+        ${laneEl("Gardian's role", s.ro, 'chip-ro', true)}
+      </div>
+    </div>
+  `;
+}
+
+document.getElementById('snav').innerHTML = D.map((s, i) => `
+  <button class="stage-btn" onclick="show(${i})">
+    <div class="num">${String(s.n).padStart(2, '0')}</div>
+    <div>${s.name}</div>
+  </button>
+`).join('');
+
+show(0);
+</script>
+</body>
+</html>
