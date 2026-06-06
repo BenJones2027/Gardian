@@ -1,0 +1,2325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gardian — Garden Enclosure System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark:   #2E5E3E;
+    --green-mid:    #3E8B52;
+    --teal:         #2E7D6E;
+    --blue:         #2C5F8A;
+    --green-light:  #6BBF59;
+    --cream:        #F5F0E8;
+    --cream-dark:   #EDE7D8;
+    --soil:         #3D2B1A;
+    --text:         #1A2217;
+    --text-muted:   #5A6B56;
+    --white:        #FFFFFF;
+    --grad-brand:   linear-gradient(135deg, var(--green-light) 0%, var(--teal) 50%, var(--blue) 100%);
+    --shadow-card:  0 4px 24px rgba(30,60,30,0.10);
+    --radius:       12px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(46,94,62,0.12);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 64px;
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+    text-decoration: none;
+  }
+
+  .nav-logo-mark {
+    width: 36px; height: 36px;
+  }
+
+  .nav-logo-text {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--soil);
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links {
+    display: flex; gap: 2px; list-style: none;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--green-dark);
+    background: rgba(46,94,62,0.08);
+  }
+
+  .nav-cta {
+    background: var(--green-dark);
+    color: var(--white) !important;
+    border-radius: 8px;
+    padding: 8px 18px !important;
+    font-weight: 600 !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--green-mid) !important; color: var(--white) !important; }
+
+  /* ─── PAGES ────────────────────────────────────────────── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ─── HOME ─────────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    padding-top: 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    padding: 6vw 4vw 6vw 8vw;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(46,94,62,0.08);
+    border: 1px solid rgba(46,94,62,0.18);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--green-dark);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    width: fit-content;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green-mid);
+  }
+
+  .hero-heading {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    color: var(--soil);
+    letter-spacing: -0.03em;
+  }
+
+  .hero-heading em {
+    font-style: italic;
+    font-weight: 300;
+    background: var(--grad-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 440px;
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--green-dark);
+    color: var(--white);
+    border: none; border-radius: 10px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--green-mid); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--green-dark);
+    border: 1.5px solid var(--green-dark);
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-secondary:hover { background: rgba(46,94,62,0.06); transform: translateY(-1px); }
+
+  .hero-stats {
+    display: flex; gap: 32px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(46,94,62,0.12);
+  }
+
+  .hero-stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--green-dark);
+  }
+
+  .hero-stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .hero-right {
+    height: 100vh;
+    position: relative;
+    background: linear-gradient(160deg, #d4e8c2 0%, #a8d5b0 40%, #7abfa8 75%, #5895c0 100%);
+    overflow: hidden;
+  }
+
+  /* SVG product illustration */
+  .hero-illustration {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    animation: floatUp 0.9s ease-out both;
+  }
+
+  @keyframes floatUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(40px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  .hero-badge {
+    position: absolute;
+    top: 60px; right: 32px;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(8px);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--green-dark);
+    box-shadow: var(--shadow-card);
+    animation: slideIn 1s 0.4s ease-out both;
+  }
+
+  .hero-badge-sub { font-weight: 400; color: var(--text-muted); }
+
+  @keyframes slideIn {
+    from { opacity:0; transform: translateX(20px); }
+    to   { opacity:1; transform: translateX(0); }
+  }
+
+  /* How it works */
+  .section {
+    padding: 96px 8vw;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .section-heading {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: var(--soil);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    max-width: 560px;
+    margin-bottom: 48px;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .step-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .step-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(30,60,30,0.14); }
+
+  .step-num {
+    font-family: 'Fraunces', serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(46,94,62,0.07);
+    position: absolute;
+    top: 12px; right: 20px;
+    line-height: 1;
+  }
+
+  .step-icon {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: rgba(46,94,62,0.08);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+    font-size: 1.4rem;
+  }
+
+  .step-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--soil);
+    margin-bottom: 10px;
+  }
+
+  .step-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* Features strip */
+  .features-strip {
+    background: var(--green-dark);
+    padding: 72px 8vw;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 36px;
+  }
+
+  .feature-item {
+    color: rgba(255,255,255,0.85);
+  }
+
+  .feature-icon {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .feature-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .feature-desc {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    opacity: 0.75;
+  }
+
+  /* Persona callout */
+  .persona-strip {
+    padding: 80px 8vw;
+    background: var(--cream-dark);
+  }
+
+  .persona-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .persona-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    box-shadow: var(--shadow-card);
+    border-top: 3px solid transparent;
+    transition: transform 0.2s;
+  }
+  .persona-card:hover { transform: translateY(-3px); }
+  .persona-card:nth-child(1) { border-top-color: var(--green-light); }
+  .persona-card:nth-child(2) { border-top-color: var(--teal); }
+  .persona-card:nth-child(3) { border-top-color: var(--green-dark); }
+  .persona-card:nth-child(4) { border-top-color: var(--blue); }
+
+  .persona-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--soil);
+    margin-bottom: 2px;
+  }
+
+  .persona-role {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .persona-quote {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.55;
+  }
+
+  /* CTA band */
+  .cta-band {
+    padding: 96px 8vw;
+    text-align: center;
+    background: linear-gradient(135deg, #e8f2e2 0%, #d4eae4 50%, #cde0ee 100%);
+  }
+
+  .cta-band h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    color: var(--soil);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .cta-band p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 480px;
+    margin: 0 auto 36px;
+  }
+
+  /* ─── ABOUT ─────────────────────────────────────────────── */
+  .about-hero {
+    padding: 140px 8vw 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    color: var(--soil);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .about-hero p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .about-photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .about-photo-block {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .about-photo-block.tall {
+    grid-row: span 2;
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 160px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+  }
+
+  .mission-section {
+    padding: 72px 8vw;
+    background: var(--soil);
+    color: var(--white);
+  }
+
+  .mission-section h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .mission-section p {
+    opacity: 0.78;
+    line-height: 1.72;
+    max-width: 700px;
+    font-size: 1.02rem;
+  }
+
+  .values-grid {
+    padding: 80px 8vw;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .value-card {
+    padding: 32px 28px;
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow-card);
+  }
+
+  .value-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+
+  .value-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--soil);
+    margin-bottom: 8px;
+  }
+
+  .value-desc { font-size: 0.87rem; color: var(--text-muted); line-height: 1.6; }
+
+  .team-section {
+    padding: 80px 8vw;
+    background: var(--cream-dark);
+  }
+
+  /* ─── SUSTAINABILITY ────────────────────────────────────── */
+  .sustain-hero {
+    padding: 140px 8vw 80px;
+    background: linear-gradient(160deg, #1a3a2a 0%, #2E5E3E 50%, #2C5F8A 100%);
+    color: var(--white);
+  }
+
+  .sustain-hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+
+  .sustain-hero p {
+    opacity: 0.8;
+    max-width: 580px;
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+  .sustain-stats {
+    display: flex; gap: 48px;
+    margin-top: 48px;
+    padding-top: 36px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .sustain-stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--green-light);
+    line-height: 1;
+  }
+
+  .sustain-stat-label {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+
+  .plastic-section {
+    padding: 88px 8vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .plastic-section h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.7rem, 2.5vw, 2.3rem);
+    font-weight: 800;
+    color: var(--soil);
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .plastic-section p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+  }
+
+  .supply-chain {
+    display: flex; flex-direction: column; gap: 0;
+  }
+
+  .chain-step {
+    display: flex; gap: 20px; align-items: flex-start;
+    position: relative;
+    padding-bottom: 28px;
+  }
+
+  .chain-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px; top: 40px;
+    width: 2px;
+    bottom: 0;
+    background: linear-gradient(to bottom, var(--teal), transparent);
+  }
+
+  .chain-dot {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--grad-brand);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    color: white;
+    box-shadow: 0 4px 12px rgba(46,125,110,0.3);
+  }
+
+  .chain-label {
+    font-weight: 600;
+    color: var(--soil);
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  .chain-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .cert-grid {
+    padding: 72px 8vw;
+    background: var(--cream-dark);
+  }
+
+  .cert-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .cert-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-card);
+    border-left: 4px solid var(--teal);
+  }
+
+  .cert-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--teal);
+    background: rgba(46,125,110,0.08);
+    border-radius: 100px;
+    padding: 4px 10px;
+    margin-bottom: 14px;
+  }
+
+  .cert-status.pending { color: #8B6914; background: rgba(139,105,20,0.08); }
+  .cert-status.pending::before { background: #D4A017; }
+  .cert-status::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+
+  .cert-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--soil);
+    margin-bottom: 8px;
+  }
+
+  .cert-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.55; }
+
+  .durability-section {
+    padding: 88px 8vw;
+  }
+
+  .durability-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .durability-table th {
+    background: var(--green-dark);
+    color: var(--white);
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .durability-table td {
+    padding: 14px 20px;
+    font-size: 0.87rem;
+    color: var(--text);
+    border-bottom: 1px solid rgba(46,94,62,0.08);
+  }
+
+  .durability-table tr:last-child td { border-bottom: none; }
+  .durability-table tr:nth-child(even) td { background: rgba(46,94,62,0.03); }
+
+  .pass-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(107,191,89,0.12);
+    color: var(--green-dark);
+    font-size: 0.75rem; font-weight: 700;
+    border-radius: 100px; padding: 3px 10px;
+  }
+
+  /* ─── BUILDER WIZARD ────────────────────────────────────── */
+  .wizard-wrapper {
+    padding-top: 64px;
+    min-height: 100vh;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .wizard-header {
+    background: var(--white);
+    border-bottom: 1px solid rgba(46,94,62,0.1);
+    padding: 24px 8vw;
+  }
+
+  .wizard-header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--soil);
+    margin-bottom: 4px;
+  }
+
+  .wizard-header p {
+    font-size: 0.87rem;
+    color: var(--text-muted);
+  }
+
+  .wizard-progress {
+    display: flex; gap: 8px; align-items: center;
+    padding: 20px 8vw;
+    background: var(--white);
+    border-bottom: 1px solid rgba(46,94,62,0.08);
+  }
+
+  .prog-step {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--text-muted);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  .prog-step.active { opacity: 1; color: var(--green-dark); }
+  .prog-step.done { opacity: 1; color: var(--teal); }
+
+  .prog-dot {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(46,94,62,0.1);
+    border: 2px solid rgba(46,94,62,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  .prog-step.active .prog-dot {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: white;
+  }
+
+  .prog-step.done .prog-dot {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: white;
+  }
+
+  .prog-line {
+    flex: 1; height: 2px;
+    background: rgba(46,94,62,0.1);
+  }
+
+  .wizard-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 40px 8vw;
+  }
+
+  .wizard-main {
+    padding-right: 40px;
+  }
+
+  .wizard-step { display: none; }
+  .wizard-step.active { display: block; }
+
+  .wizard-step h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--soil);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .wizard-step .step-hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+
+  .tile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .tile {
+    border: 2px solid rgba(46,94,62,0.15);
+    border-radius: var(--radius);
+    padding: 18px 14px;
+    cursor: pointer;
+    text-align: center;
+    background: var(--white);
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    user-select: none;
+  }
+
+  .tile:hover { border-color: var(--green-mid); transform: translateY(-2px); }
+
+  .tile.selected {
+    border-color: var(--green-dark);
+    background: rgba(46,94,62,0.06);
+  }
+
+  .tile-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+
+  .tile-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--soil);
+  }
+
+  .tile-sub {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .input-group {
+    margin-bottom: 20px;
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .input-group input, .input-group select {
+    width: 100%;
+    max-width: 300px;
+    padding: 11px 14px;
+    border: 1.5px solid rgba(46,94,62,0.2);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--white);
+    transition: border-color 0.2s;
+  }
+
+  .input-group input:focus, .input-group select:focus {
+    outline: none;
+    border-color: var(--green-dark);
+  }
+
+  .input-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+  .toggle-card {
+    border: 2px solid rgba(46,94,62,0.15);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 12px;
+    background: var(--white);
+    cursor: pointer;
+    display: flex; align-items: flex-start; gap: 16px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .toggle-card.selected {
+    border-color: var(--green-dark);
+    background: rgba(46,94,62,0.05);
+  }
+
+  .toggle-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid rgba(46,94,62,0.25);
+    flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .toggle-card.selected .toggle-check {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+  }
+
+  .toggle-check::after {
+    content: '✓';
+    font-size: 0.65rem;
+    color: white;
+    display: none;
+  }
+
+  .toggle-card.selected .toggle-check::after { display: block; }
+
+  .toggle-info .toggle-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--soil);
+    margin-bottom: 3px;
+  }
+
+  .toggle-info .toggle-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .recommend-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(46,125,110,0.1);
+    color: var(--teal);
+    font-size: 0.68rem; font-weight: 700;
+    border-radius: 4px; padding: 2px 8px;
+    margin-left: 8px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  .wizard-nav {
+    display: flex; gap: 12px; align-items: center;
+    margin-top: 8px;
+  }
+
+  .btn-back {
+    background: transparent;
+    border: 1.5px solid rgba(46,94,62,0.2);
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-back:hover { border-color: var(--green-dark); color: var(--green-dark); }
+
+  .btn-next {
+    background: var(--green-dark);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-next:hover { background: var(--green-mid); }
+
+  /* BOM sidebar */
+  .bom-sidebar {
+    position: sticky;
+    top: 100px;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    box-shadow: var(--shadow-card);
+    height: fit-content;
+  }
+
+  .bom-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--soil);
+    margin-bottom: 4px;
+  }
+
+  .bom-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(46,94,62,0.1);
+  }
+
+  .bom-empty {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .bom-line {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(46,94,62,0.06);
+    gap: 8px;
+  }
+
+  .bom-item-name {
+    font-size: 0.78rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .bom-item-qty {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .bom-item-price {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--green-dark);
+    white-space: nowrap;
+  }
+
+  .bom-total {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 2px solid var(--green-dark);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .bom-total-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--soil);
+  }
+
+  .bom-total-price {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--green-dark);
+  }
+
+  .bom-note {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* Results screen */
+  .results-screen {
+    display: none;
+    padding: 40px 8vw;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .results-screen.active { display: block; }
+
+  .results-hero {
+    text-align: center;
+    padding: 40px 0 48px;
+  }
+
+  .results-check {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--grad-brand);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 24px rgba(46,125,110,0.3);
+  }
+
+  .results-hero h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--soil);
+    margin-bottom: 10px;
+  }
+
+  .results-hero p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .results-bom {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 24px;
+  }
+
+  .results-bom h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--soil);
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(46,94,62,0.1);
+  }
+
+  .results-line {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(46,94,62,0.06);
+  }
+
+  .results-line:last-of-type { border-bottom: none; }
+
+  .results-item { font-size: 0.88rem; color: var(--text); }
+  .results-qty { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+  .results-price { font-weight: 600; font-size: 0.9rem; color: var(--green-dark); }
+
+  .results-total {
+    display: flex; justify-content: space-between;
+    padding: 16px 0 0;
+    margin-top: 8px;
+    border-top: 2px solid var(--green-dark);
+  }
+
+  .results-total span:first-child { font-weight: 600; color: var(--soil); }
+
+  .results-total-price {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--green-dark);
+  }
+
+  .results-actions {
+    display: flex; gap: 12px; justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-cart {
+    background: var(--green-dark);
+    color: white;
+    border: none; border-radius: 10px;
+    padding: 16px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-cart:hover { background: var(--green-mid); }
+
+  /* ─── FOOTER ────────────────────────────────────────────── */
+  footer {
+    background: var(--soil);
+    color: rgba(255,255,255,0.6);
+    padding: 48px 8vw 32px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 40px;
+  }
+
+  .footer-brand {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+
+  .footer-logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: white;
+  }
+
+  .footer-tagline { font-size: 0.8rem; line-height: 1.55; }
+
+  .footer-col h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 14px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: 0.83rem;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+
+  .footer-col a:hover { color: white; }
+
+  .footer-bottom {
+    background: var(--soil);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 16px 8vw;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    display: flex; justify-content: space-between;
+  }
+
+  /* ─── RESPONSIVE ────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { height: 300px; }
+    .hero-left { padding: 40px 5vw; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .features-strip { grid-template-columns: 1fr 1fr; }
+    .persona-grid { grid-template-columns: 1fr 1fr; }
+    .about-hero { grid-template-columns: 1fr; gap: 32px; }
+    .plastic-section { grid-template-columns: 1fr; gap: 40px; }
+    .cert-cards { grid-template-columns: 1fr; }
+    .values-grid { grid-template-columns: 1fr; }
+    .wizard-body { grid-template-columns: 1fr; padding: 24px 5vw; }
+    .wizard-main { padding-right: 0; }
+    .bom-sidebar { position: static; }
+    .tile-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+  }
+
+  /* Entrance animation */
+  .fade-in {
+    animation: fadeIn 0.5s ease both;
+  }
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(12px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')">
+    <!-- Inline SVG logo mark matching brand colors -->
+    <svg class="nav-logo-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lg1" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#6BBF59"/>
+          <stop offset="50%" stop-color="#2E7D6E"/>
+          <stop offset="100%" stop-color="#2C5F8A"/>
+        </linearGradient>
+      </defs>
+      <!-- Three fence pickets -->
+      <rect x="2" y="14" width="5" height="18" rx="1" fill="url(#lg1)" opacity="0.9"/>
+      <polygon points="4.5,6 2,14 7,14" fill="url(#lg1)" opacity="0.9"/>
+      <rect x="9" y="11" width="5" height="21" rx="1" fill="url(#lg1)"/>
+      <polygon points="11.5,3 9,11 14,11" fill="url(#lg1)"/>
+      <rect x="16" y="14" width="5" height="18" rx="1" fill="url(#lg1)" opacity="0.85"/>
+      <polygon points="18.5,6 16,14 21,14" fill="url(#lg1)" opacity="0.85"/>
+      <!-- Horizontal rails -->
+      <rect x="2" y="19" width="19" height="2.5" rx="1" fill="url(#lg1)" opacity="0.4"/>
+      <rect x="2" y="27" width="19" height="2.5" rx="1" fill="url(#lg1)" opacity="0.4"/>
+      <!-- Leaf -->
+      <path d="M24 20 C24 14 30 12 32 8 C32 14 28 18 24 20Z" fill="url(#lg1)"/>
+    </svg>
+    <span class="nav-logo-text">Gardian</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home'); return false;" id="nav-home" class="active">Home</a></li>
+    <li><a href="#" onclick="showPage('about'); return false;" id="nav-about">About Us</a></li>
+    <li><a href="#" onclick="showPage('sustainability'); return false;" id="nav-sustainability">Sustainability</a></li>
+    <li><a href="#" onclick="showPage('wizard'); return false;" id="nav-wizard" class="nav-cta">Build Your Enclosure →</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-left">
+      <span class="hero-eyebrow">Modular Garden Protection</span>
+      <h1 class="hero-heading">Your garden,<br><em>fully defended.</em><br>Always accessible.</h1>
+      <p class="hero-sub">Gardian is a modular, reconfigurable pest enclosure system built from recycled ocean-bound plastic. No DIY skills. No pesticides. No compromises on access.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('wizard')">Build Your Enclosure</button>
+        <button class="btn-secondary" onclick="showPage('about')">How It Works</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">100%</div>
+          <div class="hero-stat-label">Recycled ocean-bound plastic</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">No tools</div>
+          <div class="hero-stat-label">Required for assembly</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">Any bed</div>
+          <div class="hero-stat-label">Raised, in-ground, or container</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <!-- Product illustration (SVG) -->
+      <svg class="hero-illustration" viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3E8B52"/>
+            <stop offset="100%" stop-color="#2E5E3E"/>
+          </linearGradient>
+          <linearGradient id="gateGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2E7D6E"/>
+            <stop offset="100%" stop-color="#2C5F8A"/>
+          </linearGradient>
+        </defs>
+        <!-- Raised bed -->
+        <rect x="60" y="240" width="400" height="60" rx="6" fill="#5C3D1E" opacity="0.85"/>
+        <rect x="70" y="248" width="380" height="44" rx="4" fill="#7A5230" opacity="0.7"/>
+        <!-- Soil -->
+        <ellipse cx="260" cy="244" rx="185" ry="10" fill="#4A2E0E" opacity="0.5"/>
+        <!-- Panel 1 (left) -->
+        <rect x="72" y="150" width="100" height="95" rx="3" fill="url(#panelGrad)" opacity="0.92"/>
+        <rect x="77" y="155" width="90" height="85" rx="2" fill="none" stroke="#6BBF59" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"/>
+        <!-- mesh lines panel 1 -->
+        <line x1="90" y1="155" x2="90" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="105" y1="155" x2="105" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="120" y1="155" x2="120" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="135" y1="155" x2="135" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="150" y1="155" x2="150" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="77" y1="168" x2="162" y2="168" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="77" y1="183" x2="162" y2="183" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="77" y1="198" x2="162" y2="198" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="77" y1="213" x2="162" y2="213" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="77" y1="228" x2="162" y2="228" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <!-- Gate panel (center) - slightly open to suggest accessibility -->
+        <rect x="176" y="144" width="90" height="100" rx="3" fill="url(#gateGrad)" opacity="0.92"/>
+        <rect x="181" y="149" width="80" height="90" rx="2" fill="none" stroke="#7FC4B8" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"/>
+        <!-- mesh lines gate -->
+        <line x1="196" y1="149" x2="196" y2="244" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <line x1="211" y1="149" x2="211" y2="244" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <line x1="226" y1="149" x2="226" y2="244" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <line x1="241" y1="149" x2="241" y2="244" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <line x1="181" y1="164" x2="261" y2="164" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <line x1="181" y1="179" x2="261" y2="179" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <line x1="181" y1="194" x2="261" y2="194" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <line x1="181" y1="209" x2="261" y2="209" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <line x1="181" y1="224" x2="261" y2="224" stroke="#A8D5D0" stroke-width="0.5" opacity="0.4"/>
+        <!-- Gate latch indicator -->
+        <circle cx="264" cy="195" r="5" fill="#F5D680" opacity="0.9"/>
+        <!-- Panel 3 (right of gate) -->
+        <rect x="270" y="150" width="100" height="95" rx="3" fill="url(#panelGrad)" opacity="0.92"/>
+        <rect x="275" y="155" width="90" height="85" rx="2" fill="none" stroke="#6BBF59" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"/>
+        <line x1="288" y1="155" x2="288" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="303" y1="155" x2="303" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="318" y1="155" x2="318" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="333" y1="155" x2="333" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="348" y1="155" x2="348" y2="240" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="275" y1="168" x2="360" y2="168" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="275" y1="183" x2="360" y2="183" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="275" y1="198" x2="360" y2="198" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="275" y1="213" x2="360" y2="213" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <line x1="275" y1="228" x2="360" y2="228" stroke="#A8D5A2" stroke-width="0.5" opacity="0.4"/>
+        <!-- Panel 4 (far right) -->
+        <rect x="374" y="152" width="90" height="93" rx="3" fill="url(#panelGrad)" opacity="0.85"/>
+        <!-- Mounting feet -->
+        <rect x="78" y="236" width="14" height="12" rx="3" fill="#1E3D28"/>
+        <rect x="150" y="236" width="14" height="12" rx="3" fill="#1E3D28"/>
+        <rect x="182" y="236" width="14" height="12" rx="3" fill="#1E3D28"/>
+        <rect x="255" y="236" width="14" height="12" rx="3" fill="#1E3D28"/>
+        <rect x="276" y="236" width="14" height="12" rx="3" fill="#1E3D28"/>
+        <rect x="350" y="236" width="14" height="12" rx="3" fill="#1E3D28"/>
+        <!-- Plants peeking over -->
+        <ellipse cx="130" cy="148" rx="16" ry="10" fill="#5CB85C" opacity="0.8"/>
+        <ellipse cx="115" cy="152" rx="12" ry="8" fill="#4CAF50" opacity="0.7"/>
+        <ellipse cx="300" cy="145" rx="14" ry="9" fill="#5CB85C" opacity="0.8"/>
+        <ellipse cx="320" cy="150" rx="10" ry="7" fill="#66BB6A" opacity="0.7"/>
+        <path d="M220 145 C220 132 226 128 230 122 C230 132 226 140 220 145Z" fill="#5CB85C" opacity="0.7"/>
+      </svg>
+      <div class="hero-badge">
+        <div>🐇 Pest-proof to ground level</div>
+        <div class="hero-badge-sub">Including burrowing animals</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section">
+    <div class="section-label">How it works</div>
+    <h2 class="section-heading">From garden measurements to protected beds in three steps</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-num">01</span>
+        <div class="step-icon">📐</div>
+        <h3 class="step-title">Tell us about your garden</h3>
+        <p class="step-desc">Enter your bed dimensions, garden type, and the pests you're dealing with. Our Builder Wizard handles the math and selects the right components.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">02</span>
+        <div class="step-icon">📦</div>
+        <h3 class="step-title">Receive your custom kit</h3>
+        <p class="step-desc">We ship exactly the panels, gates, mounting feet, and accessories you need — nothing more, nothing less. Every component is labeled for your configuration.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">03</span>
+        <div class="step-icon">🌿</div>
+        <h3 class="step-title">Assemble in under 30 minutes</h3>
+        <p class="step-desc">Snap panels together, attach mounting feet, and you're done. No tools, no cutting, no concrete. Reconfigure or expand anytime as your garden grows.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature strip -->
+  <div class="features-strip">
+    <div class="feature-item">
+      <span class="feature-icon">♻️</span>
+      <div class="feature-title">Ocean-Bound Plastic</div>
+      <p class="feature-desc">Every Gardian panel is made from plastic collected before it reaches the ocean. Better for your garden, better for the water.</p>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">🔩</span>
+      <div class="feature-title">Tool-Free Assembly</div>
+      <p class="feature-desc">Snap-lock panel connections and push-in mounting feet require no tools, no special skills, and no help from a neighbor.</p>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">🚪</span>
+      <div class="feature-title">Gate Access on Every Side</div>
+      <p class="feature-desc">Gate panels can be positioned anywhere in your enclosure. No more stepping over — open the gate, walk in, get to work.</p>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">📏</span>
+      <div class="feature-title">Any Bed, Any Size</div>
+      <p class="feature-desc">Works with raised beds (1× or 2× lumber), in-ground plots, and stock tanks. Panel counts scale to your exact dimensions.</p>
+    </div>
+  </div>
+
+  <!-- Personas -->
+  <section class="persona-strip">
+    <div class="section-label">Built for real gardeners</div>
+    <h2 class="section-heading">Gardian works for everyone who grows</h2>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <div class="persona-name">Agnes H.</div>
+        <div class="persona-role">Retired educator, Portland OR</div>
+        <div class="persona-quote">"I needed something I could open and close without bending my knees. The gate system changed everything."</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">Victoria M.</div>
+        <div class="persona-role">Parent & weekend gardener, Raleigh NC</div>
+        <div class="persona-quote">"The kids can't accidentally destroy the tomatoes anymore, and neither can the neighborhood rabbits."</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">John C.</div>
+        <div class="persona-role">Hobbyist farmer, Franklin TN</div>
+        <div class="persona-quote">"I run multiple beds. The fact that I can use the same panel system across all of them — that's the whole sell for me."</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">Owen B.</div>
+        <div class="persona-role">Ecological restoration specialist, Driftless Area</div>
+        <div class="persona-quote">"I asked hard questions about the supply chain. The ocean-bound plastic documentation answered them."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <div class="cta-band">
+    <h2>Ready to protect your garden?</h2>
+    <p>Use our Builder Wizard to configure your enclosure in about two minutes — and see exactly what you need before you buy.</p>
+    <button class="btn-primary" onclick="showPage('wizard')">Start the Builder Wizard →</button>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">
+      <div class="footer-logo-text">Gardian</div>
+      <p class="footer-tagline">Modular garden enclosure systems made from recycled ocean-bound plastic. Designed for access. Built to last.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a onclick="showPage('wizard')">Builder Wizard</a>
+      <a onclick="showPage('home')">Shop</a>
+      <a onclick="showPage('sustainability')">Materials</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a onclick="showPage('about')">About Us</a>
+      <a onclick="showPage('sustainability')">Sustainability</a>
+      <a>Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a>Installation Guides</a>
+      <a>FAQ</a>
+      <a>Warranty</a>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span>© 2026 Gardian. All rights reserved.</span>
+    <span>Made from ocean-bound plastic.</span>
+  </div>
+
+</div><!-- /page-home -->
+
+
+<!-- ═══════════════════════════════════════
+     PAGE: ABOUT
+═══════════════════════════════════════ -->
+<div id="page-about" class="page">
+
+  <div class="about-hero">
+    <div>
+      <div class="section-label">About Gardian</div>
+      <h1>Pest-free gardening shouldn't require a chemistry degree or a bad back.</h1>
+      <p>Gardian was born from a frustratingly familiar situation: a well-tended vegetable garden, a persistent squirrel population, and the realization that every existing "solution" asked you to choose between protecting your crops and actually accessing them.</p>
+      <p>After several seasons of iterating on a DIY fence-and-gate system — testing it against squirrels, chipmunks, raccoons, and the occasional toddler — we knew the core design was solid. What it needed was proper materials, real modularity, and a way for any gardener to configure it for their specific setup without needing a tape measure, a saw, and an afternoon to spare.</p>
+      <p>That's Gardian. A modular, reconfigurable enclosure system that snaps together, adapts to your beds, and never asks you to step over anything to harvest a tomato.</p>
+    </div>
+    <div class="about-photo-grid">
+      <div class="about-photo-block tall" style="background: linear-gradient(160deg,#c8e6c0,#a5d6a7,#7abfa8); display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:4rem;">🌿</div>
+      <div class="about-photo-block" style="background: linear-gradient(135deg,#dcedc8,#c5e1a5); display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:2.5rem; min-height:140px;">🏡</div>
+      <div class="about-photo-block" style="background: linear-gradient(135deg,#b2dfdb,#80cbc4); display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:2.5rem; min-height:140px;">♻️</div>
+    </div>
+  </div>
+
+  <div class="mission-section">
+    <div class="section-label" style="color:rgba(107,191,89,0.8)">Our Mission</div>
+    <h2>Make chemical-free pest protection accessible to every home gardener.</h2>
+    <p>We believe no gardener should have to choose between keeping pests out and being able to reach their plants. We also believe that the materials we build products from matter — which is why every Gardian panel starts as plastic collected from coastal communities before it reaches the ocean.</p>
+  </div>
+
+  <div class="values-grid">
+    <div class="value-card">
+      <span class="value-icon">🚪</span>
+      <div class="value-title">Access First</div>
+      <p class="value-desc">Every design decision starts with the question: can the gardener still get in? Gate panels are a core feature, not an add-on. Accessibility for gardeners with limited mobility is a design requirement, not an afterthought.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-icon">♻️</span>
+      <div class="value-title">Material Honesty</div>
+      <p class="value-desc">We document our supply chain. The ocean-bound plastic in our panels comes from certified collection programs. We'll publish the data — and we'll keep improving it.</p>
+    </div>
+    <div class="value-card">
+      <span class="value-icon">🔧</span>
+      <div class="value-title">Modular by Default</div>
+      <p class="value-desc">A 4×8 raised bed and a sprawling in-ground plot deserve the same system. Gardian panels are designed to recombine across seasons, bed types, and yard layouts.</p>
+    </div>
+  </div>
+
+  <section class="team-section">
+    <div class="section-label">The Team</div>
+    <h2 class="section-heading">Built by gardeners who got tired of losing crops.</h2>
+    <p style="color:var(--text-muted); max-width:560px; font-size:0.95rem; line-height:1.7; margin-top:16px;">Gardian is a Northwestern University student venture in development. The product concept emerged from years of personal experience designing and iterating on a functional garden enclosure system, combined with user research across multiple gardener personas and growing contexts.</p>
+  </section>
+
+  <footer>
+    <div class="footer-brand">
+      <div class="footer-logo-text">Gardian</div>
+      <p class="footer-tagline">Modular garden enclosure systems made from recycled ocean-bound plastic.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a onclick="showPage('wizard')">Builder Wizard</a>
+      <a onclick="showPage('sustainability')">Materials</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a onclick="showPage('about')">About Us</a>
+      <a onclick="showPage('sustainability')">Sustainability</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a>Installation Guides</a>
+      <a>FAQ</a>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span>© 2026 Gardian.</span><span>Made from ocean-bound plastic.</span>
+  </div>
+
+</div><!-- /page-about -->
+
+
+<!-- ═══════════════════════════════════════
+     PAGE: SUSTAINABILITY
+═══════════════════════════════════════ -->
+<div id="page-sustainability" class="page">
+
+  <div class="sustain-hero">
+    <div class="section-label" style="color:rgba(107,191,89,0.8)">Sustainability</div>
+    <h1>Built from plastic that almost didn't make it back.</h1>
+    <p>Ocean-bound plastic is collected within 50 kilometers of coastlines in regions without adequate waste infrastructure — before it enters waterways. Every kilogram of Gardian panel material represents plastic that won't become marine debris.</p>
+    <div class="sustain-stats">
+      <div>
+        <div class="sustain-stat-num">100%</div>
+        <div class="sustain-stat-label">Recycled content by weight</div>
+      </div>
+      <div>
+        <div class="sustain-stat-num">&lt;50km</div>
+        <div class="sustain-stat-label">Collection radius from coastline</div>
+      </div>
+      <div>
+        <div class="sustain-stat-num">0</div>
+        <div class="sustain-stat-label">Pesticide inputs required</div>
+      </div>
+      <div>
+        <div class="sustain-stat-num">3+ yrs</div>
+        <div class="sustain-stat-label">Target outdoor service life</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plastic-section">
+    <div>
+      <div class="section-label">Ocean-Bound Plastic</div>
+      <h2>What "ocean-bound" actually means</h2>
+      <p>The term "ocean-bound plastic" refers to plastic waste collected in areas at high risk of ocean entry — typically within 50 kilometers of a coastline, in regions where formal waste management infrastructure is limited or absent.</p>
+      <p>Unlike post-consumer recycled content from developed-market collection systems, ocean-bound plastic requires active intervention: community-based collection programs, sorting, and certification. Gardian sources from suppliers with third-party certification of their ocean-bound plastic supply chains.</p>
+      <p>The finished material is a UV-stabilized, impact-resistant recycled plastic compound suitable for outdoor use. It does not require paint or surface treatments, will not splinter, and is resistant to the freeze-thaw cycling common in Zones 4–7.</p>
+    </div>
+    <div>
+      <div class="section-label">Supply Chain</div>
+      <div class="supply-chain">
+        <div class="chain-step">
+          <div class="chain-dot">🌊</div>
+          <div>
+            <div class="chain-label">Coastal collection</div>
+            <div class="chain-desc">Plastic waste collected within 50km of at-risk coastlines by certified community programs in Southeast Asia and South America.</div>
+          </div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-dot">🔍</div>
+          <div>
+            <div class="chain-label">Third-party certification</div>
+            <div class="chain-desc">Material certified against ocean-bound plastic standards by accredited certification bodies (Vericel, or equivalent).</div>
+          </div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-dot">🏭</div>
+          <div>
+            <div class="chain-label">Processing & compounding</div>
+            <div class="chain-desc">Sorted plastic processed into UV-stabilized compound pellets for injection molding. Freeze-thaw and impact resistance validated.</div>
+          </div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-dot">🔩</div>
+          <div>
+            <div class="chain-label">Panel manufacturing</div>
+            <div class="chain-desc">Compound molded into Gardian panel frames and feet. No virgin plastic inputs in structural components.</div>
+          </div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-dot">📦</div>
+          <div>
+            <div class="chain-label">Shipped to your garden</div>
+            <div class="chain-desc">Packaged in minimal, recyclable packaging. Direct-to-consumer fulfillment reduces intermediary handling.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cert-grid">
+    <div class="section-label">Certifications & Testing</div>
+    <h2 class="section-heading">What we can show you today, and what's in progress.</h2>
+    <div class="cert-cards">
+      <div class="cert-card">
+        <div class="cert-status">In Progress</div>
+        <div class="cert-name">Ocean-Bound Plastic Certification</div>
+        <p class="cert-desc">Third-party certification of ocean-bound plastic content in structural panel components. Target certification partner: Vericel or equivalent accredited body.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-status pending">Planned</div>
+        <div class="cert-name">UV Resistance Testing</div>
+        <p class="cert-desc">Accelerated UV weathering testing per ASTM G154 to validate outdoor service life claims. Target: no significant degradation after 3-year equivalent exposure.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-status pending">Planned</div>
+        <div class="cert-name">Freeze-Thaw Cycle Testing</div>
+        <p class="cert-desc">Material testing across simulated Zone 4b/5a freeze-thaw cycles to verify panel integrity for cold-climate users. No cracking, warping, or dimensional change targets.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-status">In Progress</div>
+        <div class="cert-name">Recycled Content Documentation</div>
+        <p class="cert-desc">Full material transparency report documenting recycled content percentage, source region, and certification chain of custody for each SKU.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-status pending">Planned</div>
+        <div class="cert-name">Load & Impact Testing</div>
+        <p class="cert-desc">Structural panel testing against simulated pest pressure (raccoon/woodchuck force loads) and incidental impact to validate claimed pest-exclusion performance.</p>
+      </div>
+      <div class="cert-card">
+        <div class="cert-status pending">Planned</div>
+        <div class="cert-name">ASTM F963 (Consumer Safety)</div>
+        <p class="cert-desc">Consumer product safety standard compliance review, particularly for edge treatment and hardware, relevant to households with children.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="durability-section">
+    <div class="section-label">Durability Specifications</div>
+    <h2 class="section-heading">Performance targets for Gardian v1 panels</h2>
+    <table class="durability-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Test Method</th>
+          <th>Target Value</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>UV weathering resistance</td>
+          <td>ASTM G154</td>
+          <td>No significant color change or embrittlement after 3-yr equivalent</td>
+          <td><span class="pass-badge">✓ Specified</span></td>
+        </tr>
+        <tr>
+          <td>Freeze-thaw cycle integrity</td>
+          <td>ASTM C666 (adapted)</td>
+          <td>No cracking or warping across 100 cycles (Zone 4b equivalent)</td>
+          <td><span class="pass-badge">✓ Specified</span></td>
+        </tr>
+        <tr>
+          <td>Lateral panel load (pest pressure)</td>
+          <td>Internal</td>
+          <td>Withstand 40 lbf lateral load at mid-panel without permanent deformation</td>
+          <td><span class="pass-badge">✓ Specified</span></td>
+        </tr>
+        <tr>
+          <td>Mesh gauge & aperture</td>
+          <td>Visual / dimensional</td>
+          <td>≤1" aperture, galvanized or stainless steel, 16-gauge minimum</td>
+          <td><span class="pass-badge">✓ Specified</span></td>
+        </tr>
+        <tr>
+          <td>Snap-lock retention force</td>
+          <td>Internal</td>
+          <td>Panel connection holds under 25 lbf pull-apart load</td>
+          <td><span class="pass-badge">✓ Specified</span></td>
+        </tr>
+        <tr>
+          <td>Assembly time (single enclosure)</td>
+          <td>User testing</td>
+          <td>≤30 minutes for standard 4×8 configuration, no tools</td>
+          <td><span class="pass-badge">✓ Specified</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.78rem; color:var(--text-muted); margin-top:14px;">Testing protocols and results will be published on this page as physical prototyping and formal testing proceed. All values listed above are design targets pending formal validation.</p>
+  </div>
+
+  <footer>
+    <div class="footer-brand">
+      <div class="footer-logo-text">Gardian</div>
+      <p class="footer-tagline">Modular garden enclosure systems made from recycled ocean-bound plastic.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a onclick="showPage('wizard')">Builder Wizard</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a onclick="showPage('about')">About Us</a>
+      <a onclick="showPage('sustainability')">Sustainability</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a>FAQ</a>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span>© 2026 Gardian.</span><span>Made from ocean-bound plastic.</span>
+  </div>
+
+</div><!-- /page-sustainability -->
+
+
+<!-- ═══════════════════════════════════════
+     PAGE: BUILDER WIZARD
+═══════════════════════════════════════ -->
+<div id="page-wizard" class="page">
+  <div class="wizard-wrapper">
+
+    <div class="wizard-header">
+      <h1>Build Your Enclosure</h1>
+      <p>Answer a few questions about your garden and we'll recommend the exact Gardian components you need.</p>
+    </div>
+
+    <div class="wizard-progress" id="wizard-progress">
+      <div class="prog-step active" id="prog-1">
+        <div class="prog-dot">1</div>
+        <span>Plants</span>
+      </div>
+      <div class="prog-line"></div>
+      <div class="prog-step" id="prog-2">
+        <div class="prog-dot">2</div>
+        <span>Pests</span>
+      </div>
+      <div class="prog-line"></div>
+      <div class="prog-step" id="prog-3">
+        <div class="prog-dot">3</div>
+        <span>Garden Type</span>
+      </div>
+      <div class="prog-line"></div>
+      <div class="prog-step" id="prog-4">
+        <div class="prog-dot">4</div>
+        <span>Dimensions</span>
+      </div>
+      <div class="prog-line"></div>
+      <div class="prog-step" id="prog-5">
+        <div class="prog-dot">5</div>
+        <span>Extras</span>
+      </div>
+    </div>
+
+    <div class="wizard-body" id="wizard-body">
+      <div class="wizard-main">
+
+        <!-- Step 1: Plants -->
+        <div class="wizard-step active" id="step-1">
+          <h2>What are you growing?</h2>
+          <p class="step-hint">Select all that apply. This helps us recommend the right panel height and mesh spacing.</p>
+          <div class="tile-grid">
+            <div class="tile" onclick="toggleTile(this)" data-val="vegetables">
+              <span class="tile-icon">🥕</span>
+              <div class="tile-label">Vegetables</div>
+              <div class="tile-sub">Tomatoes, peppers, greens</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="herbs">
+              <span class="tile-icon">🌿</span>
+              <div class="tile-label">Herbs</div>
+              <div class="tile-sub">Basil, parsley, mint</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="fruits">
+              <span class="tile-icon">🍓</span>
+              <div class="tile-label">Fruits & Berries</div>
+              <div class="tile-sub">Strawberries, melons</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="flowers">
+              <span class="tile-icon">🌸</span>
+              <div class="tile-label">Flowers</div>
+              <div class="tile-sub">Annuals, perennials</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="vines">
+              <span class="tile-icon">🌱</span>
+              <div class="tile-label">Climbing Vines</div>
+              <div class="tile-sub">Beans, cucumbers, squash</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="mixed">
+              <span class="tile-icon">🥬</span>
+              <div class="tile-label">Mixed / Other</div>
+              <div class="tile-sub">Variety of plants</div>
+            </div>
+          </div>
+          <div class="wizard-nav">
+            <button class="btn-next" onclick="nextStep(1)">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Pests -->
+        <div class="wizard-step" id="step-2">
+          <h2>What are you keeping out?</h2>
+          <p class="step-hint">Select all that apply. Burrowing pests trigger a ground skirt recommendation.</p>
+          <div class="tile-grid">
+            <div class="tile" onclick="toggleTile(this)" data-val="rabbits">
+              <span class="tile-icon">🐰</span>
+              <div class="tile-label">Rabbits</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="squirrels">
+              <span class="tile-icon">🐿️</span>
+              <div class="tile-label">Squirrels</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="chipmunks">
+              <span class="tile-icon">🐾</span>
+              <div class="tile-label">Chipmunks</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="groundhog" data-burrow="true">
+              <span class="tile-icon">🦫</span>
+              <div class="tile-label">Groundhogs</div>
+              <div class="tile-sub">Burrowing</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="raccoons">
+              <span class="tile-icon">🦝</span>
+              <div class="tile-label">Raccoons</div>
+            </div>
+            <div class="tile" onclick="toggleTile(this)" data-val="deer">
+              <span class="tile-icon">🦌</span>
+              <div class="tile-label">Deer</div>
+            </div>
+          </div>
+          <div class="wizard-nav">
+            <button class="btn-back" onclick="prevStep(2)">← Back</button>
+            <button class="btn-next" onclick="nextStep(2)">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Garden Type -->
+        <div class="wizard-step" id="step-3">
+          <h2>What kind of garden do you have?</h2>
+          <p class="step-hint">This determines which mounting feet you'll need.</p>
+          <div class="toggle-card" id="type-raised1x" onclick="selectType('raised1x')">
+            <div class="toggle-check"></div>
+            <div class="toggle-info">
+              <div class="toggle-title">Raised bed — 1× lumber <span class="recommend-badge">Most common</span></div>
+              <div class="toggle-desc">Standard 1×6 or 1×8 boards, typically ~¾" thick. The most common raised bed construction.</div>
+            </div>
+          </div>
+          <div class="toggle-card" id="type-raised2x" onclick="selectType('raised2x')">
+            <div class="toggle-check"></div>
+            <div class="toggle-info">
+              <div class="toggle-title">Raised bed — 2× lumber</div>
+              <div class="toggle-desc">2×6, 2×8, or 2×10 boards (~1½" thick). Heavier-duty raised bed construction, or doubled boards.</div>
+            </div>
+          </div>
+          <div class="toggle-card" id="type-inground" onclick="selectType('inground')">
+            <div class="toggle-check"></div>
+            <div class="toggle-info">
+              <div class="toggle-title">In-ground plot</div>
+              <div class="toggle-desc">Garden planted directly in the ground. Uses on-ground mounting feet with optional ground stakes.</div>
+            </div>
+          </div>
+          <div class="toggle-card" id="type-container" onclick="selectType('container')">
+            <div class="toggle-check"></div>
+            <div class="toggle-info">
+              <div class="toggle-title">Stock tank / container</div>
+              <div class="toggle-desc">Metal stock tanks, large planters, or other container gardens. Custom mounting solutions may apply.</div>
+            </div>
+          </div>
+          <div class="wizard-nav">
+            <button class="btn-back" onclick="prevStep(3)">← Back</button>
+            <button class="btn-next" onclick="nextStep(3)">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Dimensions -->
+        <div class="wizard-step" id="step-4">
+          <h2>How big is your garden?</h2>
+          <p class="step-hint">Enter the perimeter dimensions of your bed or plot. We'll calculate exactly how many panels you need.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:400px;">
+            <div class="input-group">
+              <label>Length (feet)</label>
+              <input type="number" id="dim-length" placeholder="e.g. 8" min="2" max="40" oninput="calcBOM()">
+            </div>
+            <div class="input-group">
+              <label>Width (feet)</label>
+              <input type="number" id="dim-width" placeholder="e.g. 4" min="2" max="40" oninput="calcBOM()">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Your ZIP code <span style="font-weight:400; color:var(--text-muted)">(optional — for hardiness zone notes)</span></label>
+            <input type="text" id="zip-code" placeholder="e.g. 97201" maxlength="5" pattern="[0-9]{5}">
+          </div>
+          <div class="wizard-nav">
+            <button class="btn-back" onclick="prevStep(4)">← Back</button>
+            <button class="btn-next" onclick="nextStep(4)">Continue →</button>
+          </div>
+        </div>
+
+        <!-- Step 5: Extras -->
+        <div class="wizard-step" id="step-5">
+          <h2>Any add-ons?</h2>
+          <p class="step-hint">Optional accessories to complete your setup.</p>
+          <div class="toggle-card" id="addon-skirt" onclick="toggleAddon('skirt')">
+            <div class="toggle-check"></div>
+            <div class="toggle-info">
+              <div class="toggle-title">Ground skirt <span id="skirt-badge" class="recommend-badge" style="display:none">Recommended for your pests</span></div>
+              <div class="toggle-desc">Galvanized steel mesh skirt that extends 6" below grade, preventing burrowing access. Recommended for groundhogs, voles, and chipmunks. +$34.99</div>
+            </div>
+          </div>
+          <div class="toggle-card" id="addon-trellis" onclick="toggleAddon('trellis')">
+            <div class="toggle-check"></div>
+            <div class="toggle-info">
+              <div class="toggle-title">Trellis panels</div>
+              <div class="toggle-desc">Large-spacing wire mesh panels that mount between standard Gardian panels, enabling climbing plants (beans, cucumbers, squash) to grow vertically. +$24.99 per panel.</div>
+            </div>
+          </div>
+          <div class="toggle-card" id="addon-stakes" onclick="toggleAddon('stakes')">
+            <div class="toggle-check"></div>
+            <div class="toggle-info">
+              <div class="toggle-title">Ground stakes (4-pack)</div>
+              <div class="toggle-desc">6" galvanized stakes that anchor on-ground mounting feet into soil. Recommended for in-ground beds or soft/loose soil. +$12.99</div>
+            </div>
+          </div>
+          <div class="wizard-nav">
+            <button class="btn-back" onclick="prevStep(5)">← Back</button>
+            <button class="btn-next" onclick="showResults()">See My Kit →</button>
+          </div>
+        </div>
+
+      </div><!-- /wizard-main -->
+
+      <!-- BOM Sidebar -->
+      <div class="bom-sidebar">
+        <div class="bom-title">Your Kit</div>
+        <div class="bom-subtitle">Updates as you configure</div>
+        <div id="bom-content">
+          <div class="bom-empty">Complete the wizard steps to see your component list.</div>
+        </div>
+      </div>
+
+    </div><!-- /wizard-body -->
+
+    <!-- Results screen -->
+    <div class="results-screen" id="results-screen">
+      <div class="results-hero">
+        <div class="results-check">✓</div>
+        <h2>Your Gardian configuration is ready.</h2>
+        <p>Here's everything you need to protect your garden.</p>
+      </div>
+      <div class="results-bom">
+        <h3>Bill of Materials</h3>
+        <div id="results-bom-lines"></div>
+        <div class="results-total">
+          <span>Estimated Total</span>
+          <span class="results-total-price" id="results-total-price">—</span>
+        </div>
+      </div>
+      <p style="text-align:center; font-size:0.78rem; color:var(--text-muted); margin-bottom:28px;">Prices are estimates. Actual pricing TBD at product launch. Shipping not included.</p>
+      <div class="results-actions">
+        <button class="btn-cart">Pre-order on Kickstarter →</button>
+        <button class="btn-secondary" onclick="resetWizard()">Reconfigure</button>
+      </div>
+    </div>
+
+  </div><!-- /wizard-wrapper -->
+</div><!-- /page-wizard -->
+
+
+<script>
+// ── Page navigation ──────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  // Update nav active state
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── Wizard state ──────────────────────────────────────────
+let currentStep = 1;
+const totalSteps = 5;
+
+const state = {
+  plants: [],
+  pests: [],
+  gardenType: null,
+  length: 0,
+  width: 0,
+  gates: 1,
+  zip: '',
+  addons: []
+};
+
+// Pricing
+const PANEL_PRICE = 29.99;
+const GATE_PRICE  = 39.99;
+const FOOT_RAISED1X = 9.99;
+const FOOT_RAISED2X = 11.99;
+const FOOT_GROUND   = 8.99;
+const SKIRT_PRICE   = 34.99;
+const TRELLIS_PRICE = 24.99;
+const STAKES_PRICE  = 12.99;
+
+function toggleTile(el) {
+  el.classList.toggle('selected');
+  // Sync state
+  const step = el.closest('.wizard-step').id;
+  if (step === 'step-1') {
+    state.plants = [...document.querySelectorAll('#step-1 .tile.selected')].map(t => t.dataset.val);
+  } else if (step === 'step-2') {
+    state.pests = [...document.querySelectorAll('#step-2 .tile.selected')].map(t => t.dataset.val);
+    // Show/hide skirt badge
+    const hasBurrow = state.pests.includes('groundhog') || state.pests.includes('chipmunks');
+    document.getElementById('skirt-badge').style.display = hasBurrow ? 'inline-flex' : 'none';
+    if (hasBurrow && !state.addons.includes('skirt')) {
+      // Pre-select ground skirt
+      document.getElementById('addon-skirt').classList.add('selected');
+      state.addons.push('skirt');
+    }
+  }
+  calcBOM();
+}
+
+function selectType(type) {
+  document.querySelectorAll('.toggle-card[id^="type-"]').forEach(c => c.classList.remove('selected'));
+  document.getElementById('type-' + type).classList.add('selected');
+  state.gardenType = type;
+  calcBOM();
+}
+
+function toggleAddon(addon) {
+  const card = document.getElementById('addon-' + addon);
+  card.classList.toggle('selected');
+  if (card.classList.contains('selected')) {
+    if (!state.addons.includes(addon)) state.addons.push(addon);
+  } else {
+    state.addons = state.addons.filter(a => a !== addon);
+  }
+  calcBOM();
+}
+
+// ── BOM Calculation ───────────────────────────────────────
+function calcBOM() {
+  state.length = parseFloat(document.getElementById('dim-length')?.value) || 0;
+  state.width  = parseFloat(document.getElementById('dim-width')?.value)  || 0;
+
+  const items = [];
+  let total = 0;
+
+  // Panel count: (length / 4) + (width / 4), each panel is 4' wide
+  if (state.length > 0 && state.width > 0) {
+    const panelCount = Math.round((state.length + state.width) / 2);
+
+    items.push({ name: 'Gardian panel (4\'×4\')', qty: panelCount, unit: PANEL_PRICE });
+
+    // Mounting feet: 2 per panel (one each end)
+    const footCount = panelCount * 2;
+    let footName = 'Mounting foot (on-ground)';
+    let footPrice = FOOT_GROUND;
+    if (state.gardenType === 'raised1x') { footName = 'Raised-bed foot, ¾"'; footPrice = FOOT_RAISED1X; }
+    else if (state.gardenType === 'raised2x') { footName = 'Raised-bed foot, 1½"'; footPrice = FOOT_RAISED2X; }
+    items.push({ name: footName, qty: footCount, unit: footPrice });
+
+    total = items.reduce((s, i) => s + i.qty * i.unit, 0);
+  }
+
+  if (state.addons.includes('skirt')) {
+    items.push({ name: 'Ground skirt (burrowing exclusion)', qty: 1, unit: SKIRT_PRICE });
+    total += SKIRT_PRICE;
+  }
+  if (state.addons.includes('trellis')) {
+    items.push({ name: 'Trellis panel', qty: 2, unit: TRELLIS_PRICE });
+    total += 2 * TRELLIS_PRICE;
+  }
+  if (state.addons.includes('stakes')) {
+    items.push({ name: 'Ground stakes (4-pack)', qty: 1, unit: STAKES_PRICE });
+    total += STAKES_PRICE;
+  }
+
+  renderBOM(items, total);
+}
+
+function renderBOM(items, total) {
+  const el = document.getElementById('bom-content');
+  if (!items.length) {
+    el.innerHTML = '<div class="bom-empty">Complete the wizard steps to see your component list.</div>';
+    return;
+  }
+  let html = items.map(i => `
+    <div class="bom-line">
+      <div>
+        <div class="bom-item-name">${i.name}</div>
+        <div class="bom-item-qty">Qty: ${i.qty} × $${i.unit.toFixed(2)}</div>
+      </div>
+      <div class="bom-item-price">$${(i.qty * i.unit).toFixed(2)}</div>
+    </div>`).join('');
+  if (total > 0) {
+    html += `
+      <div class="bom-total">
+        <span class="bom-total-label">Est. Total</span>
+        <span class="bom-total-price">$${total.toFixed(2)}</span>
+      </div>
+      <p class="bom-note">Estimates only. Final pricing at launch. Shipping not included.</p>`;
+  }
+  el.innerHTML = html;
+}
+
+// ── Step navigation ───────────────────────────────────────
+function nextStep(from) {
+  if (from < totalSteps) {
+    setStep(from + 1);
+  }
+}
+
+function prevStep(from) {
+  if (from > 1) setStep(from - 1);
+}
+
+function setStep(n) {
+  // Hide all steps
+  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  currentStep = n;
+
+  // Update progress
+  for (let i = 1; i <= totalSteps; i++) {
+    const prog = document.getElementById('prog-' + i);
+    prog.classList.remove('active', 'done');
+    if (i < n) prog.classList.add('done');
+    else if (i === n) prog.classList.add('active');
+  }
+
+  // Update progress dot labels with checkmarks for done
+  for (let i = 1; i < n; i++) {
+    document.getElementById('prog-' + i).querySelector('.prog-dot').textContent = '✓';
+  }
+  document.getElementById('prog-' + n).querySelector('.prog-dot').textContent = n;
+  calcBOM();
+}
+
+function showResults() {
+  calcBOM();
+  // Build results screen
+  const items = [];
+  let total = 0;
+
+  const length = parseFloat(document.getElementById('dim-length')?.value) || 0;
+  const width  = parseFloat(document.getElementById('dim-width')?.value)  || 0;
+
+  if (length > 0 && width > 0) {
+    const panelCount = Math.round((length + width) / 2);
+
+    items.push({ name: "Gardian panel (4'×4')", qty: panelCount, unit: PANEL_PRICE });
+
+    const footCount = panelCount * 2;
+    let footName = 'Mounting foot (on-ground)';
+    let footPrice = FOOT_GROUND;
+    if (state.gardenType === 'raised1x') { footName = 'Raised-bed foot, ¾"'; footPrice = FOOT_RAISED1X; }
+    else if (state.gardenType === 'raised2x') { footName = 'Raised-bed foot, 1½"'; footPrice = FOOT_RAISED2X; }
+    items.push({ name: footName, qty: footCount, unit: footPrice });
+    total = items.reduce((s, i) => s + i.qty * i.unit, 0);
+  } else {
+    items.push({ name: "Gardian panel (4'×4')", qty: 6, unit: PANEL_PRICE });
+    items.push({ name: 'Raised-bed foot, ¾"', qty: 12, unit: FOOT_RAISED1X });
+    total = 6*PANEL_PRICE + 12*FOOT_RAISED1X;
+  }
+
+  if (state.addons.includes('skirt'))   { items.push({ name: 'Ground skirt', qty: 1, unit: SKIRT_PRICE }); total += SKIRT_PRICE; }
+  if (state.addons.includes('trellis')) { items.push({ name: 'Trellis panel', qty: 2, unit: TRELLIS_PRICE }); total += 2*TRELLIS_PRICE; }
+  if (state.addons.includes('stakes'))  { items.push({ name: 'Ground stakes (4-pack)', qty: 1, unit: STAKES_PRICE }); total += STAKES_PRICE; }
+
+  const linesHtml = items.map(i => `
+    <div class="results-line">
+      <div>
+        <div class="results-item">${i.name}</div>
+        <div class="results-qty">Qty: ${i.qty}</div>
+      </div>
+      <div class="results-price">$${(i.qty * i.unit).toFixed(2)}</div>
+    </div>`).join('');
+
+  document.getElementById('results-bom-lines').innerHTML = linesHtml;
+  document.getElementById('results-total-price').textContent = '$' + total.toFixed(2);
+
+  // Hide wizard body, show results
+  document.getElementById('wizard-body').style.display = 'none';
+  document.getElementById('wizard-progress').style.display = 'none';
+  document.getElementById('results-screen').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function resetWizard() {
+  // Reset state
+  state.plants = []; state.pests = []; state.gardenType = null;
+  state.length = 0; state.width = 0; state.gates = 1; state.addons = [];
+
+  document.querySelectorAll('.tile.selected').forEach(t => t.classList.remove('selected'));
+  document.querySelectorAll('.toggle-card.selected').forEach(t => t.classList.remove('selected'));
+  if (document.getElementById('dim-length')) document.getElementById('dim-length').value = '';
+  if (document.getElementById('dim-width')) document.getElementById('dim-width').value = '';
+  document.getElementById('bom-content').innerHTML = '<div class="bom-empty">Complete the wizard steps to see your component list.</div>';
+
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('wizard-body').style.display = '';
+  document.getElementById('wizard-progress').style.display = '';
+  setStep(1);
+}
+</script>
+</body>
+</html>
